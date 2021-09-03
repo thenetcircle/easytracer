@@ -1,10 +1,11 @@
+import logging
 from contextlib import contextmanager
 from datetime import datetime as dt
 from time import perf_counter
 from typing import Optional
 from uuid import uuid4 as uuid
 
-from loguru import logger
+logger = logging.getLogger(__name__)
 
 
 class Span:
@@ -72,8 +73,8 @@ class Tracer:
         if self.logging:
             logger.info(f"elapsed {elapsed:.4f}s, reporting span: {span}")
 
-        # TODO: send udp to collector
-        logger.debug(span.to_event())
+            # TODO: send udp to collector
+            logger.debug(span.to_event())
 
     @contextmanager
     def start_span(self, name: str, child_of: Optional[Span]):
