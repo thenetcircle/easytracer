@@ -8,7 +8,7 @@ def inject(span, carrier: dict):
     carrier["x-tracer-servicename"] = span.service_name
 
 
-def parent_span_from_headers(headers: dict) -> Span:
+def extract(headers: dict) -> Span:
     # TODO: check if headers exist
 
     return Span(
