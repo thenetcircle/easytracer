@@ -1,11 +1,11 @@
-import logging
+import logging as logging_system
 from contextlib import contextmanager
 from datetime import datetime as dt
 from time import perf_counter
 from typing import Optional
 from uuid import uuid4 as uuid
 
-logger = logging.getLogger(__name__)
+logger = logging_system.getLogger(__name__)
 
 
 class Span:
