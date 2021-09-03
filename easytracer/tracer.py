@@ -37,7 +37,7 @@ class Span:
     def log_kv(self, kv: dict):
         self.context = kv
 
-    def to_event(self):
+    def to_event(self, status, error_msg):
         event = {
             "span_id": self.span_id,
             "name": self.name,
@@ -45,7 +45,9 @@ class Span:
             "service_name": self.service_name,
             "trace_id": self.trace_id,
             "child_of": "",
-            "context": dict()
+            "context": dict(),
+            "status": status,
+            "error_msg": error_msg
         }
 
         if self.child_of:
@@ -69,20 +71,26 @@ class Tracer:
         self.logging = logging
         self.sampler = sampler
 
-    def report_span(self, span: Span, elapsed: float):
+    def report_span(self, span: Span, elapsed: float, status: str, error_msg: str):
         if self.logging:
-            logger.info(f"elapsed {elapsed:.4f}s, reporting span: {span}")
+            logger.info(f"[{status}] elapsed {elapsed:.4f}s, reporting span: {span}")
 
             # TODO: send udp to collector
-            logger.debug(span.to_event())
+            logger.debug(span.to_event(status, error_msg))
 
     @contextmanager
     def start_span(self, name: str, child_of: Optional[Span]):
         start = perf_counter()
         span = Span(self.service_name, name, child_of)
+        status = "ok"
+        error_msg = ""
 
-        yield span
+        try:
+            yield span
+        except Exception as e:
+            status = "exception"
+            error_msg = str(e)
 
         end = perf_counter()
         elapsed = end - start
-        self.report_span(span, elapsed)
+        self.report_span(span, elapsed, status, error_msg)
