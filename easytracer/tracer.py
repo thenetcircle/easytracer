@@ -79,7 +79,7 @@ class Tracer:
             logger.debug(span.to_event(status, error_msg))
 
     @contextmanager
-    def start_span(self, name: str, child_of: Optional[Span]):
+    def start_span(self, name: str, child_of: Optional[Span] = None):
         start = perf_counter()
         span = Span(self.service_name, name, child_of)
         status = "ok"
