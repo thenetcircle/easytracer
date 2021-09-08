@@ -1,5 +1,6 @@
 from easytracer.tracer import Span
 from easytracer.tracer import Tracer
+from easytracer.config import Config
 
 
 class HttpHeaders:
