@@ -13,7 +13,7 @@ setup(
     keywords='easytracer',
     author='Oscar Eriksson',
     author_email='oscar.eriks@gmail.com',
-    url='https://github.com/thenetcircle/EASYTRACER',
+    url='https://github.com/thenetcircle/easytracer',
     license='LICENSE',
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     include_package_data=True,
