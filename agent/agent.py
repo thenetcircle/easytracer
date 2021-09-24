@@ -23,19 +23,17 @@ r_server = redis.Redis(
 
 
 async def server():
-    print("creating socket")
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.bind((udp_bind_ip, udp_bin_port))
 
         while True:
-            print("binding socket")
             try:
-                sock.bind((udp_bind_ip, udp_bin_port))
                 data = await loop.sock_recv(sock, SIXTY_FOUR_KB)
-                # data, _ = sock.recvfrom(SIXTY_FOUR_KB)
                 print(data)
             except Exception as e:
                 print(f"got exception: {str(e)}")
+                print(sys.exc_info())
                 sock.close()
                 sys.exit(1)
 
