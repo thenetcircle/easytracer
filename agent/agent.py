@@ -22,7 +22,7 @@ r_server = redis.Redis(
 )
 
 
-async def server():
+async def server(queue):
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind((udp_bind_ip, udp_bin_port))
@@ -30,13 +30,39 @@ async def server():
         while True:
             try:
                 data = await loop.sock_recv(sock, SIXTY_FOUR_KB)
-                print(data)
+                data = str(data, "utf-8")
+                print(f"ready from socket: {data}")
+                await queue.put(data)
             except Exception as e:
                 print(f"got exception: {str(e)}")
                 print(sys.exc_info())
                 sock.close()
                 sys.exit(1)
 
+
+async def consumer(queue):
+    while True:
+        data = await queue.get()
+        print(f"send to redis: {data}")
+        queue.task_done()
+
+
+async def main():
+    queue = asyncio.Queue()
+
+    # fire up the both producers and consumers
+    producers = [asyncio.create_task(server(queue))]
+    consumers = [asyncio.create_task(consumer(queue))]
+
+    await asyncio.gather(*producers)
+    await queue.join()
+
+    for c in consumers:
+        c.cancel()
+
+
+loop = asyncio.get_event_loop()
+asyncio.run(main())
 
 """
 async def main():
@@ -50,6 +76,6 @@ async def main():
         await asyncio.sleep(1)
 """
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(server())
-loop.close()
+#
+#loop.run_until_complete(server())
+#loop.close()
