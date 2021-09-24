@@ -31,7 +31,7 @@ async def server(queue):
             try:
                 data = await loop.sock_recv(sock, SIXTY_FOUR_KB)
                 data = str(data, "utf-8")
-                print(f"ready from socket: {data}")
+                print(f"read from socket: {data}")
                 await queue.put(data)
             except Exception as e:
                 print(f"got exception: {str(e)}")
@@ -42,9 +42,14 @@ async def server(queue):
 
 async def consumer(queue):
     while True:
-        data = await queue.get()
-        print(f"send to redis: {data}")
-        queue.task_done()
+        try:
+            print("waiting on queue")
+            data = await queue.get()
+            print(f"send to redis: {data}")
+            queue.task_done()
+        except Exception as e:
+            print(f"error on queue get: {str(e)}")
+            print(sys.exc_info())
 
 
 async def main():
