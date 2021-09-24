@@ -36,7 +36,6 @@ async def server(queue):
             except Exception as e:
                 print(f"got exception: {str(e)}")
                 print(sys.exc_info())
-                sock.close()
                 sys.exit(1)
 
 
@@ -56,14 +55,16 @@ async def main():
     queue = asyncio.Queue()
 
     # fire up the both producers and consumers
-    producers = [asyncio.create_task(server(queue))]
-    consumers = [asyncio.create_task(consumer(queue))]
+    jobs = [
+        asyncio.create_task(server(queue)),
+        asyncio.create_task(consumer(queue))
+    ]
 
-    await asyncio.gather(*producers)
+    await asyncio.gather(*jobs)
     await queue.join()
 
-    for c in consumers:
-        c.cancel()
+    for j in jobs:
+        j.cancel()
 
 
 loop = asyncio.get_event_loop()
