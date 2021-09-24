@@ -1,9 +1,14 @@
+import json
 import logging as logging_system
 from contextlib import contextmanager
 from datetime import datetime as dt
 from time import perf_counter
 from typing import Optional
 from uuid import uuid4 as uuid
+
+import socket
+
+from easytracer.config import ConfigKeys
 
 logger = logging_system.getLogger(__name__)
 
@@ -52,9 +57,10 @@ class Span:
 
         if self.child_of:
             event["child_of"] = self.child_of.span_id
-
         if self.context:
             event["context"] = self.context
+
+        return event
 
     def __str__(self):
         if self.child_of is None:
@@ -66,17 +72,20 @@ class Span:
 
 
 class Tracer:
-    def __init__(self, service_name: str, logging: bool, sampler: float):
+    def __init__(self, service_name: str, logging: bool, sampler: float, config: dict):
         self.service_name = service_name
         self.logging = logging
         self.sampler = sampler
+        self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.reporter_host = config.get(ConfigKeys.REPORT_HOST, "127.0.0.1")
+        self.reporter_port = config.get(ConfigKeys.REPORT_HOST, 6789)
 
     def report_span(self, span: Span, elapsed: float, status: str, error_msg: str):
         if self.logging:
             logger.info(f"[{status}] elapsed {elapsed:.4f}s, reporting span: {span}")
 
-            # TODO: send udp to collector
-            logger.debug(span.to_event(status, error_msg))
+        binary_event = bytes(json.dumps(span.to_event(status, error_msg)), "utf-8")
+        self.udp_socket.sendto(binary_event, (self.reporter_host, self.reporter_port))
 
     @contextmanager
     def start_span(self, name: str, child_of: Optional[Span] = None):
