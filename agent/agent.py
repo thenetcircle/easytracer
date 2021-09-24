@@ -46,6 +46,8 @@ def consumer(queue):
             if response.status_code != 200:
                 logger.error(f"non-ok response code {response.status_code} for {collector_endpoint}, data was:")
                 logger.error(data)
+
+            # TODO: do we need to put task_done() in "finally:"? or will this event get re-processed forever if failing?
             queue.task_done()
         except Exception as e:
             print(f"error on queue get: {str(e)}")
