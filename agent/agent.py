@@ -23,7 +23,8 @@ r_server = redis.Redis(
 )
 
 
-async def server(queue):
+async def listener(queue, loop):
+    print("starting listener")
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind((udp_bind_ip, udp_bin_port))
@@ -41,6 +42,7 @@ async def server(queue):
 
 
 async def consumer(queue):
+    print("starting consumer")
     while True:
         try:
             print("waiting on queue")
@@ -52,18 +54,20 @@ async def consumer(queue):
             print(sys.exc_info())
 
 
-async def main():
+def main():
     executor = ProcessPoolExecutor(2)
     queue = asyncio.Queue()
+    loop = asyncio.get_event_loop()
 
-    loop.run_in_executor(executor, server, queue)
+    loop.run_in_executor(executor, listener, queue, loop)
     loop.run_in_executor(executor, consumer, queue)
 
-    await queue.join()
+    loop.run_forever()
 
 
-loop = asyncio.get_event_loop()
-asyncio.run(main())
+if __name__ == "__main__":
+    main()
+
 
 """
 async def main():
