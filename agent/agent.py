@@ -19,6 +19,8 @@ udp_bin_port = env.config.get(ConfigKeys.BIND_PORT, 6789)
 collector_endpoint = env.config.get(ConfigKeys.BIND_IP, "http://127.0.0.1:6790/v1/collect")
 
 
+# listen on UDP packets from loopback interface, then send them directly to the shared Queue
+# to be able to accept new packets as soon as possible
 def listener(queue):
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -35,6 +37,7 @@ def listener(queue):
                 sys.exit(1)
 
 
+# consume the events posted on the shared Queue and post then to the collector using TCP
 def consumer(queue):
     while True:
         try:
