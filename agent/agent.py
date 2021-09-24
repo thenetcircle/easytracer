@@ -1,13 +1,13 @@
-import socket
-import redis
+import multiprocessing
 import os
-import time
-from etagent.config import ConfigKeys
-import signal
+import socket
 import sys
+import time
+
+import redis
 from gnenv import create_env
-import asyncio
-from concurrent.futures import ProcessPoolExecutor
+
+from etagent.config import ConfigKeys
 
 ENVIRONMENT = os.environ.get("ET_ENVIRONMENT", "local")
 SIXTY_FOUR_KB = 2 ** 16
@@ -23,30 +23,27 @@ r_server = redis.Redis(
 )
 
 
-async def listener(queue, loop):
-    print("starting listener")
+def listener(queue):
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind((udp_bind_ip, udp_bin_port))
 
         while True:
             try:
-                data = await loop.sock_recv(sock, SIXTY_FOUR_KB)
+                data = sock.recv(SIXTY_FOUR_KB)
                 data = str(data, "utf-8")
                 print(f"read from socket: {data}")
-                await queue.put(data)
+                queue.put(data)
             except Exception as e:
                 print(f"got exception: {str(e)}")
                 print(sys.exc_info())
                 sys.exit(1)
 
 
-async def consumer(queue):
-    print("starting consumer")
+def consumer(queue):
     while True:
         try:
-            print("waiting on queue")
-            data = await queue.get()
+            data = queue.get()
             print(f"send to redis: {data}")
             queue.task_done()
         except Exception as e:
@@ -55,14 +52,15 @@ async def consumer(queue):
 
 
 def main():
-    executor = ProcessPoolExecutor(2)
-    queue = asyncio.Queue()
-    loop = asyncio.get_event_loop()
+    pool = multiprocessing.Pool(processes=2)
+    m = multiprocessing.Manager()
+    q = m.Queue()
 
-    loop.run_in_executor(executor, listener, queue, loop)
-    loop.run_in_executor(executor, consumer, queue)
+    pool.apply_async(listener, (q,))
+    pool.apply_async(consumer, (q,))
 
-    loop.run_forever()
+    while True:
+        time.sleep(0.5)
 
 
 if __name__ == "__main__":
