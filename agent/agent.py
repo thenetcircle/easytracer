@@ -7,6 +7,7 @@ import signal
 import sys
 from gnenv import create_env
 import asyncio
+from concurrent.futures import ProcessPoolExecutor
 
 ENVIRONMENT = os.environ.get("ET_ENVIRONMENT", "local")
 SIXTY_FOUR_KB = 2 ** 16
@@ -52,19 +53,13 @@ async def consumer(queue):
 
 
 async def main():
+    executor = ProcessPoolExecutor(2)
     queue = asyncio.Queue()
 
-    # fire up the both producers and consumers
-    jobs = [
-        asyncio.create_task(server(queue)),
-        asyncio.create_task(consumer(queue))
-    ]
+    loop.run_in_executor(executor, server, queue)
+    loop.run_in_executor(executor, consumer, queue)
 
-    await asyncio.gather(*jobs)
     await queue.join()
-
-    for j in jobs:
-        j.cancel()
 
 
 loop = asyncio.get_event_loop()
