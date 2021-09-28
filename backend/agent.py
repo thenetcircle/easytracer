@@ -57,6 +57,11 @@ def consumer(queue):
 
 
 def main():
+    try:
+        os.remove(udp_bind_socket)
+    except OSError:
+        pass
+
     pool = multiprocessing.Pool(processes=2)
     m = multiprocessing.Manager()
     q = m.Queue()
