@@ -2,8 +2,7 @@ from easytracer.tracer import Tracer
 
 
 class ConfigKeys:
-    REPORT_HOST = "reporter_host"
-    REPORT_PORT = "reporter_port"
+    AGENT_SOCKET = "agent_socket"
     LOGGING = "logging"
     SAMPLER = "sampler"
     PARAM = "param"

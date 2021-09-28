@@ -76,16 +76,17 @@ class Tracer:
         self.service_name = service_name
         self.logging = logging
         self.sampler = sampler
+
+        agent_socket = config.get(ConfigKeys.AGENT_SOCKET, "/var/run/easytracer.sock")
         self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.reporter_host = config.get(ConfigKeys.REPORT_HOST, "127.0.0.1")
-        self.reporter_port = config.get(ConfigKeys.REPORT_HOST, 6789)
+        self.udp_socket.connect(agent_socket)
 
     def report_span(self, span: Span, elapsed: float, status: str, error_msg: str):
         if self.logging:
             logger.info(f"[{status}] elapsed {elapsed:.4f}s, reporting span: {span}")
 
         binary_event = bytes(json.dumps(span.to_event(status, error_msg)), "utf-8")
-        self.udp_socket.sendto(binary_event, (self.reporter_host, self.reporter_port))
+        self.udp_socket.send(binary_event)
 
     @contextmanager
     def start_span(self, name: str, child_of: Optional[Span] = None):

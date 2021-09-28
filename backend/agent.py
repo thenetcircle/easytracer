@@ -8,15 +8,14 @@ from loguru import logger
 
 from gnenv import create_env
 
-from etagent.config import ConfigKeys
+from backend.utils.config import ConfigKeys
 
 ENVIRONMENT = os.environ.get("ET_ENVIRONMENT", "local")
 SIXTY_FOUR_KB = 2 ** 16
 
 env = create_env(ENVIRONMENT)
-udp_bind_ip = env.config.get(ConfigKeys.BIND_IP, "127.0.0.1")
-udp_bin_port = env.config.get(ConfigKeys.BIND_PORT, 6789)
-collector_endpoint = env.config.get(ConfigKeys.BIND_IP, "http://127.0.0.1:6790/v1/collect")
+udp_bind_socket = env.config.get(ConfigKeys.BIND_SOCKET, "/var/run/easytracer.sock")
+collector_endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, "http://127.0.0.1:6790/v1/collect")
 
 
 # listen on UDP packets from loopback interface, then send them directly to the shared Queue
@@ -24,7 +23,7 @@ collector_endpoint = env.config.get(ConfigKeys.BIND_IP, "http://127.0.0.1:6790/v
 def listener(queue):
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        sock.bind((udp_bind_ip, udp_bin_port))
+        sock.bind(udp_bind_socket)
 
         while True:
             try:
@@ -53,8 +52,8 @@ def consumer(queue):
             # TODO: do we need to put task_done() in "finally:"? or will this event get re-processed forever if failing?
             queue.task_done()
         except Exception as e:
-            print(f"error on queue get: {str(e)}")
-            print(sys.exc_info())
+            logger.error(f"error on queue get: {str(e)}")
+            logger.exception(sys.exc_info())
 
 
 def main():

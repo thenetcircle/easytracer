@@ -3,5 +3,6 @@ class ConfigKeys:
     REDIS_PORT = "redis_port"
     REDIS_DB = "redis_db"
 
-    BIND_IP = "bind_ip"
-    BIND_PORT = "bind_port"
+    BIND_SOCKET = "bind_socket"
+
+    COLLECTOR_ENDPOINT = "collector_endpoint"
