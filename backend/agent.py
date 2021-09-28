@@ -30,6 +30,9 @@ def listener(queue):
                 data = sock.recv(SIXTY_FOUR_KB)
                 data = str(data, "utf-8")
                 queue.put(data)
+            except (KeyboardInterrupt, InterruptedError):
+                logger.info('received interrupt, exiting')
+                return
             except Exception as e:
                 logger.error(f"got exception when reading from socket: {str(e)}")
                 logger.error(sys.exc_info())
@@ -51,6 +54,9 @@ def consumer(queue):
 
             # TODO: do we need to put task_done() in "finally:"? or will this event get re-processed forever if failing?
             queue.task_done()
+        except (KeyboardInterrupt, InterruptedError):
+            logger.info('received interrupt, exiting')
+            return
         except Exception as e:
             logger.error(f"error on queue get: {str(e)}")
             logger.exception(sys.exc_info())
@@ -70,7 +76,11 @@ def main():
     pool.apply_async(consumer, (q,))
 
     while True:
-        time.sleep(0.5)
+        try:
+            time.sleep(0.5)
+        except (KeyboardInterrupt, InterruptedError):
+            logger.info('received interrupt, exiting')
+            return
 
 
 if __name__ == "__main__":
