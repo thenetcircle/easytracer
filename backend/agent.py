@@ -3,19 +3,19 @@ import os
 import socket
 import sys
 import time
+
 import requests
+from gnenv import create_env
 from loguru import logger
 
-from gnenv import create_env
-
-from backend.utils.config import ConfigKeys
+from utils.config import ConfigKeys
 
 ENVIRONMENT = os.environ.get("ET_ENVIRONMENT", "local")
 SIXTY_FOUR_KB = 2 ** 16
 
 env = create_env(ENVIRONMENT)
 udp_bind_socket = env.config.get(ConfigKeys.BIND_SOCKET, "/var/run/easytracer.sock")
-collector_endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, "http://127.0.0.1:6790/v1/collect")
+collector_endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, ConfigKeys.DEFAULT_COLLECTOR_ENDPOINT)
 
 
 # listen on UDP packets from loopback interface, then send them directly to the shared Queue
