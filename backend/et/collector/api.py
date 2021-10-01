@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from starlette.requests import Request
+from loguru import logger
 
 from et.collector.cassandra import CassandraHandler
 from et.collector.validator import Validator
@@ -35,6 +36,7 @@ class CollectorApi:
             )
 
         except Exception as e:
+            logger.exception(e)
             raise CollectorException(
                 status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
                 parent=e,
