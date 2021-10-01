@@ -1,7 +1,6 @@
 import json
 import logging as logging_system
 from contextlib import contextmanager
-from datetime import datetime as dt
 from time import perf_counter
 from typing import Optional
 from uuid import uuid4 as uuid
@@ -9,8 +8,18 @@ from uuid import uuid4 as uuid
 import socket
 
 from easytracer.config import ConfigKeys
+import arrow
 
 logger = logging_system.getLogger(__name__)
+
+
+def utcnow_ts():
+    # force the use of milliseconds instead microseconds
+    now = arrow.utcnow()
+    seconds = now.int_timestamp
+    ms = now.format("SSS")
+
+    return round(float(f"{seconds}.{ms}"), 3)
 
 
 class Span:
@@ -25,7 +34,7 @@ class Span:
         self.name: str = name
         self.child_of: Span = child_of
         self.service_name = service_name
-        self.created_at = dt.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.created_at = utcnow_ts
         self.context: Optional[dict] = None
 
         self.span_id = span_id
@@ -49,8 +58,6 @@ class Span:
             "created_at": self.created_at,
             "service_name": self.service_name,
             "trace_id": self.trace_id,
-            "child_of": "",
-            "context": dict(),
             "status": status,
             "error_msg": error_msg
         }

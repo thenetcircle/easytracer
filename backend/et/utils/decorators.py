@@ -19,7 +19,7 @@ def wrap_exception():
             except CollectorException as e:
                 error_cls = type(e.parent).__name__
                 logger.error(f"{error_cls}: {str(e.parent)}")
-                logger.debug(f"[{error_cls}] original data was: {e.event}")
+                logger.debug(f"[{error_cls}] original data was: {e.event.dict()}")
 
                 # uvicorn forbids non-standard http response codes, so only use 400/500 for errors
                 http_code = 400

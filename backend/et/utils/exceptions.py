@@ -1,3 +1,6 @@
+from et.collector.models.event import Event
+
+
 class ValidationError(Exception):
     def __init__(self, msg):
         self.msg = msg
@@ -15,7 +18,7 @@ class ParseError(Exception):
 
 
 class CollectorException(Exception):
-    def __init__(self, status_code: int, parent: Exception, event: dict):
+    def __init__(self, status_code: int, parent: Exception, event: Event):
         self.status_code = status_code
         self.parent = parent
         self.event = event
