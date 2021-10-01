@@ -17,8 +17,9 @@ def wrap_exception():
             try:
                 return await view_func(*args, **kwargs)
             except CollectorException as e:
-                logger.error(str(e.parent))
-                logger.debug(f"[ERROR] original data was: {e.event}")
+                error_cls = type(e.parent).__name__
+                logger.error(f"{error_cls}: {str(e.parent)}")
+                logger.debug(f"[{error_cls}] original data was: {e.event}")
 
                 # uvicorn forbids non-standard http response codes, so only use 400/500 for errors
                 http_code = 400
