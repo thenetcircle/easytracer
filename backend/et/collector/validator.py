@@ -1,4 +1,4 @@
-from backend.et.utils.exceptions import ValidationError
+from et.utils.exceptions import ValidationError
 
 
 class Validator:

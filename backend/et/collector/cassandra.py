@@ -1,4 +1,4 @@
-from backend.et.utils.exceptions import ParseError
+from et.utils.exceptions import ParseError
 
 
 class CassandraHandler:
