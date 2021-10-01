@@ -1,17 +1,34 @@
+import sys
+
 from starlette.requests import Request
 from loguru import logger
 
-from backend.etcollector.validator import EventValidator
+from backend.etcollector.cassandra import CassandraHandler
+from backend.etcollector.validator import Validator
+from backend.utils.exceptions import ParseError, ValidationError
 
 
 class CollectorApi:
     def __init__(self):
-        pass
+        self.storage = CassandraHandler()
 
     async def post(self, request: Request):
-        event = await request.json()
-        is_valid, error_msg = EventValidator.validate(event)
+        # TODO: use pydantic not the raw request
+        data = await request.json()
 
-        if not is_valid:
-            logger.error(f"event did not validate: {error_msg}")
+        try:
+            Validator.validate(data)
+        except ValidationError as e:
+            logger.error(e)
             return
+
+        try:
+            # CassandraHandler will convert pydantic to ORM
+            self.storage.save(data)
+        except ParseError as e:
+            logger.error(e)
+            logger.debug(data)
+        except Exception as e:
+            logger.error(e)
+            logger.debug(data)
+            logger.exception(sys.exc_info())

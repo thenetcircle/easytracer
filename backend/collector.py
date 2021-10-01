@@ -21,4 +21,5 @@ api_path = endpoint.split("/", 3)[-1]
 
 @app.post(api_path)
 async def check(request: Request):  # TODO: use pydantic?
+    # TODO: what if cassandra is down, back-pressure? retry? how long? agent queues might fill up, save somewhere temporary?
     return await api.post(request)
