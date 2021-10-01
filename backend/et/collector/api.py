@@ -3,9 +3,9 @@ import sys
 from starlette.requests import Request
 from loguru import logger
 
-from backend.etcollector.cassandra import CassandraHandler
-from backend.etcollector.validator import Validator
-from backend.utils.exceptions import ParseError, ValidationError
+from et.collector.cassandra import CassandraHandler
+from et.collector.validator import Validator
+from et.utils.exceptions import ParseError, ValidationError
 
 
 class CollectorApi:

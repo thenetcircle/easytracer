@@ -5,8 +5,8 @@ from gnenv import create_env
 from loguru import logger
 from starlette.requests import Request
 
-from etcollector.api import CollectorApi
-from utils.config import ConfigKeys
+from backend.et.collector.api import CollectorApi
+from backend.et.utils import ConfigKeys
 
 env = create_env(os.environ.get("ET_ENV", "local"))
 api = CollectorApi()

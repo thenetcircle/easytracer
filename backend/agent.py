@@ -8,7 +8,7 @@ import requests
 from gnenv import create_env
 from loguru import logger
 
-from utils.config import ConfigKeys
+from et.utils.config import ConfigKeys
 
 ENVIRONMENT = os.environ.get("ET_ENVIRONMENT", "local")
 SIXTY_FOUR_KB = 2 ** 16
