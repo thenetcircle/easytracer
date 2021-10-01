@@ -8,4 +8,4 @@ class CassandraHandler:
 
     def save(self, event):
         # TODO: convert to ORM model
-        raise ParseError("testing")
+        raise RuntimeError("testing")
