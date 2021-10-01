@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from fastapi import FastAPI
 from gnenv import create_env
@@ -7,11 +8,16 @@ from starlette.requests import Request
 
 from et.collector.api import CollectorApi
 from et.utils.config import ConfigKeys
+from et.utils.custom_logging import CustomizeLogger
 
 env = create_env(os.environ.get("ET_ENV", "local"))
 api = CollectorApi()
 app = FastAPI()
-app.logger = logger
+
+# force fastapi to use loguru
+config_path = Path(__file__).with_name("logging_config.json")
+custom_logger = CustomizeLogger.make_logger(config_path)
+app.logger = custom_logger
 
 endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, ConfigKeys.DEFAULT_COLLECTOR_ENDPOINT)
 api_path = "/" + endpoint.split("/", 3)[-1]
