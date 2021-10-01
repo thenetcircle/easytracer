@@ -9,6 +9,7 @@ from starlette.requests import Request
 from et.collector.api import CollectorApi
 from et.utils.config import ConfigKeys
 from et.utils.custom_logging import CustomizeLogger
+from et.utils.decorators import wrap_exception
 
 env = create_env(os.environ.get("ET_ENV", "local"))
 api = CollectorApi()
@@ -26,6 +27,7 @@ logger.info(f"listening on api path: {api_path}")
 
 
 @app.post(api_path)
+@wrap_exception
 async def check(request: Request):  # TODO: use pydantic?
     # TODO: what if cassandra is down, back-pressure? retry? how long? agent queues might fill up, save somewhere temporary?
     return await api.post(request)
