@@ -1,11 +1,10 @@
-import sys
+from http import HTTPStatus
 
 from starlette.requests import Request
-from loguru import logger
 
 from et.collector.cassandra import CassandraHandler
 from et.collector.validator import Validator
-from et.utils.exceptions import ParseError, ValidationError
+from et.utils.exceptions import ParseError, ValidationError, CollectorException
 
 
 class CollectorApi:
@@ -19,17 +18,25 @@ class CollectorApi:
         try:
             Validator.validate(data)
         except ValidationError as e:
-            logger.error(e)
-            logger.debug(data)
-            raise e
+            raise CollectorException(
+                status_code=HTTPStatus.BAD_REQUEST,
+                parent=e,
+                event=data
+            )
 
         try:
             # CassandraHandler will convert pydantic to ORM
             self.storage.save(data)
         except ParseError as e:
-            logger.error(e)
-            logger.debug(data)
+            raise CollectorException(
+                status_code=HTTPStatus.BAD_REQUEST,
+                parent=e,
+                event=data
+            )
+
         except Exception as e:
-            logger.error(e)
-            logger.debug(data)
-            raise e
+            raise CollectorException(
+                status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+                parent=e,
+                event=data
+            )

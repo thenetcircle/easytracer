@@ -1,8 +1,9 @@
 from functools import wraps
+
+from fastapi.responses import JSONResponse
 from loguru import logger
 
-from fastapi import HTTPException
-from fastapi.responses import JSONResponse
+from et.utils.exceptions import CollectorException
 
 
 def wrap_exception():
@@ -15,8 +16,9 @@ def wrap_exception():
         async def decorator(*args, **kwargs):
             try:
                 return await view_func(*args, **kwargs)
-            except HTTPException as e:
-                logger.exception(e)
+            except CollectorException as e:
+                logger.exception(e.parent)
+                logger.debug(f"[ERROR] original data was: {e.event}")
 
                 # uvicorn forbids non-standard http response codes, so only use 400/500 for errors
                 http_code = 400
@@ -25,7 +27,7 @@ def wrap_exception():
 
                 return JSONResponse(status_code=http_code, content={
                     "code": e.status_code,
-                    "detail": e.detail
+                    "detail": str(e.parent)
                 })
         return decorator
     return factory
