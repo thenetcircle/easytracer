@@ -14,7 +14,9 @@ app = FastAPI()
 app.logger = logger
 
 endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, ConfigKeys.DEFAULT_COLLECTOR_ENDPOINT)
-api_path = endpoint.split("/", 3)[-1]
+api_path = "/" + endpoint.split("/", 3)[-1]
+
+logger.info(f"listening on api path: {api_path}")
 
 
 @app.post(api_path)
