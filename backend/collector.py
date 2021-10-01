@@ -8,9 +8,7 @@ from starlette.requests import Request
 from etcollector.api import CollectorApi
 from utils.config import ConfigKeys
 
-ENVIRONMENT = os.environ.get("ET_ENVIRONMENT", "local")
-
-env = create_env(ENVIRONMENT)
+env = create_env(os.environ.get("ET_ENV", "local"))
 api = CollectorApi()
 app = FastAPI()
 app.logger = logger
