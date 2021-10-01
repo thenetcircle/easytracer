@@ -20,7 +20,8 @@ class CollectorApi:
             Validator.validate(data)
         except ValidationError as e:
             logger.error(e)
-            return
+            logger.debug(data)
+            raise e
 
         try:
             # CassandraHandler will convert pydantic to ORM
@@ -31,4 +32,4 @@ class CollectorApi:
         except Exception as e:
             logger.error(e)
             logger.debug(data)
-            logger.exception(sys.exc_info())
+            raise e
