@@ -1,4 +1,4 @@
-from et.collector.models.event_repr import Event
+from et.common.models import Event
 
 
 class ValidationError(Exception):

@@ -3,10 +3,8 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from gnenv import create_env
-from loguru import logger
 
 from et.common.api import CollectorApi
-from et.common.models import Event
 from et.utils.config import ConfigKeys
 from et.utils.custom_logging import CustomizeLogger
 from et.utils.decorators import wrap_exception
@@ -20,15 +18,10 @@ config_path = Path(__file__).with_name("logging_config.json")
 custom_logger = CustomizeLogger.make_logger(config_path)
 app.logger = custom_logger
 
-endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, ConfigKeys.DEFAULT_COLLECTOR_ENDPOINT)
-api_path = "/" + endpoint.split("/", 3)[-1]
-
-logger.info(f"listening on api path: {api_path}")
+endpoint = env.config.get(ConfigKeys.UI_BIND, ConfigKeys.DEFAULT_UI_BIND)
 
 
-@app.post(api_path)
+@app.get("/v1/event/{event_id}/spans")
 @wrap_exception()
-async def check(event: Event):
-    # TODO: what if cassandra is down, back-pressure? retry?
-    #  how long? agent queues might fill up, save somewhere temporary?
-    return await api.post(event)
+async def get_spans(event_id):
+    return await api.get(event_id)
