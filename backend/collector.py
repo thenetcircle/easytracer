@@ -11,7 +11,7 @@ from et.utils.config import ConfigKeys
 from et.utils.custom_logging import CustomizeLogger
 from et.utils.decorators import wrap_exception
 
-env = create_env(os.environ.get("ET_ENV", "local"))
+env = create_env(gn_environment=os.environ.get("ET_ENV", "local"))
 api = CollectorApi(env)
 app = FastAPI()
 
