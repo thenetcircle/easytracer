@@ -1,40 +1,25 @@
+import logging
 from http import HTTPStatus
+from typing import List
 
 from loguru import logger
 
+from et.collector.validator import Validator
 from et.common.cassandra import CassandraHandler
 from et.common.models.reprs import Event, EventWithChildren
-from et.collector.validator import Validator
 from et.utils.exceptions import ParseError, ValidationError, CollectorException
-import logging
+from et.utils.parse_events import parse_events
 
 logging.getLogger("cassandra").setLevel(logging.INFO)
 
 
-class CollectorApi:
+class TracerApi:
     def __init__(self, env):
         self.storage = CassandraHandler(env)
 
-    async def get(self, event_id: str):
+    async def get(self, event_id: str) -> List[EventWithChildren]:
         events = self.storage.get_events(event_id)
-        children_of = dict()
-        root_event = None
-
-        for event in events:
-            if event.child_of is None:
-                if root_event is not None:
-                    logger.error(f"multiple root-events for event id {event_id}")
-                root_event = event
-
-            else:
-                if event.span_id not in children_of.keys():
-                    children_of[event.span_id] = list()
-                children_of[event.span_id].append(event)
-
-        return EventWithChildren(
-            event=root_event,
-            children=children_of[root_event.span_id]  # TODO: recursive
-        )
+        return parse_events(events)
 
     async def post(self, event: Event):
         try:
