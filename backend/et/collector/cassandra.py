@@ -13,6 +13,7 @@ from et.utils.exceptions import ParseError
 class CassandraHandler:
     def __init__(self, env):
         self.env = env
+        self.setup_tables()
 
     def setup_tables(self):
         key_space = self.env.config.get(ConfigKeys.KEY_SPACE, domain=ConfigKeys.STORAGE)
