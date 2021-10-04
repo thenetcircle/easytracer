@@ -3,6 +3,8 @@ from typing import Optional
 
 
 class Event(BaseModel):
+    event_id: str
+    context_id: str
     span_id: str
     trace_id: str
     name: str
@@ -10,7 +12,7 @@ class Event(BaseModel):
     service_name: str
 
     # 'ok' or 'exception'
-    status: str
+    status: Optional[str]
 
     error_msg: Optional[str]
     context: Optional[dict]
