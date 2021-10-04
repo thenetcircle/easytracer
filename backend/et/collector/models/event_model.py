@@ -16,11 +16,6 @@ class EventModel(Model):
         required=True,
         primary_key=True
     )
-    created_at = DateTime(
-        required=True,
-        primary_key=True,
-        clustering_order="DESC"
-    )
     context_id = Text(
         required=True,
         primary_key=True
@@ -30,6 +25,9 @@ class EventModel(Model):
         primary_key=True
     )
 
+    created_at = DateTime(
+        required=True
+    )
     child_of = UUID(
         required=False
     )
