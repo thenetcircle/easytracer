@@ -6,13 +6,13 @@ from gnenv import create_env
 from loguru import logger
 
 from et.collector.api import CollectorApi
-from et.collector.models.event import Event
+from et.collector.models.event_repr import Event
 from et.utils.config import ConfigKeys
 from et.utils.custom_logging import CustomizeLogger
 from et.utils.decorators import wrap_exception
 
 env = create_env(os.environ.get("ET_ENV", "local"))
-api = CollectorApi()
+api = CollectorApi(env)
 app = FastAPI()
 
 # force fastapi/uvicorn to use loguru

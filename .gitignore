@@ -129,3 +129,7 @@ dmypy.json
 .pyre/
 
 .idea/
+
+# ignore all secrets except the default example
+backend/secrets/*.yaml
+!backend/secrets/default.yaml

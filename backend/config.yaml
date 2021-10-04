@@ -1,0 +1,12 @@
+redis:
+  host: "$REDIS_HOST"
+  port: "$REDIS_PORT"
+  db: "$REDIS_DB"
+
+storage:
+  host: "$CASSANDRA_HOSTS"
+  key_space: "$CASSANDRA_KEY_SPACE"
+  username: "$CASSANDRA_USERNAME"
+  password: "$CASSANDRA_PASSWORD"
+
+bind_socket: "$BIND_SOCKET"
