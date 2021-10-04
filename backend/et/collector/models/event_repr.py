@@ -6,7 +6,7 @@ class Event(BaseModel):
     span_id: str
     trace_id: str
     name: str
-    created_at: str
+    created_at: float
     service_name: str
 
     # 'ok' or 'exception'
