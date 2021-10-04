@@ -6,6 +6,9 @@ from et.collector.cassandra import CassandraHandler
 from et.collector.models.event_repr import Event
 from et.collector.validator import Validator
 from et.utils.exceptions import ParseError, ValidationError, CollectorException
+import logging
+
+logging.getLogger("cassandra").setLevel(logging.INFO)
 
 
 class CollectorApi:
