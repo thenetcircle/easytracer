@@ -84,8 +84,17 @@ class CassandraHandler:
             raise ParseError(e)
 
     @staticmethod
-    def event_base_from_entity(event):
-        event_dict = event.dict()
-        event_dict["created_at"] = to_ts(event_dict["created_at"])
-
-        return Event(**event_dict)
+    def event_base_from_entity(event: EventModel):
+        return Event(
+            event_id=event.event_id,
+            context_id=event.context_id,
+            span_id=event.span_id,
+            trace_id=event.trace_id,
+            name=event.name,
+            created_at=to_ts(event.created_at),
+            service_name=event.service_name,
+            status=event.status,
+            error_msg=event.error_msg,
+            context=event.context,
+            child_of=event.child_of
+        )
