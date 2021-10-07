@@ -85,6 +85,10 @@ class CassandraHandler:
 
     @staticmethod
     def event_base_from_entity(event: EventModel):
+        child_of = None
+        if event.child_of is not None:
+            child_of = str(event.child_of)
+
         return Event(
             event_id=str(event.event_id),
             context_id=event.context_id,
@@ -97,5 +101,5 @@ class CassandraHandler:
             status=event.status,
             error_msg=event.error_msg,
             context=event.context,
-            child_of=event.child_of
+            child_of=child_of
         )
