@@ -102,7 +102,7 @@ class Search extends Component {
                 {this.state.result && this.state.result.children.length > 0 && (
                     <div>
                         <div 
-                            style={{width: 500}} 
+                            style={{width: 1000}} 
                             className="bg-blue-200 border-solid border-2 border-gray-600 p-2 m-1"
                         >
                             {this.state.result.event.service_name}: {this.state.result.event.name} ({this.state.result.event.elapsed} ms)
