@@ -11,8 +11,8 @@ class ChildSpans extends Component {
                             <div className={styles.container} key={id}>
                                 <div
                                     style={{
-                                        width: 1000 * (child.event.elapsed / this.props.root_event.elapsed),
-                                        left: 1000 * (child.event.created_at - this.props.root_event.created_at) / this.props.root_event.elapsed
+                                        width: 500 * (child.event.elapsed / this.props.root_event.elapsed),
+                                        left: 500 * (child.event.created_at - this.props.root_event.created_at) / this.props.root_event.elapsed
                                     }}
                                     className="relative bg-blue-200 border-solid border-2 border-gray-600 p-2 m-1"
                                 >
