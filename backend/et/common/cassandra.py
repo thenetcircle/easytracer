@@ -90,6 +90,7 @@ class CassandraHandler:
             context_id=event.context_id,
             span_id=str(event.span_id),
             trace_id=str(event.trace_id),
+            elapsed=round(event.elapsed * 1000, 3),  # return milliseconds
             name=event.name,
             created_at=to_ts(event.created_at),
             service_name=event.service_name,

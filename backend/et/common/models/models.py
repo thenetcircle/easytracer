@@ -1,4 +1,4 @@
-from cassandra.cqlengine.columns import DateTime
+from cassandra.cqlengine.columns import DateTime, Float
 from cassandra.cqlengine.columns import Text
 from cassandra.cqlengine.columns import UUID
 from cassandra.cqlengine.models import Model
@@ -26,6 +26,9 @@ class EventModel(Model):
     )
 
     created_at = DateTime(
+        required=True
+    )
+    elapsed = Float(
         required=True
     )
     child_of = UUID(
