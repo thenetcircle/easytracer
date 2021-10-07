@@ -1,4 +1,5 @@
 import { Component, useCallback, useRef, useState } from 'react'
+import ChildSpans from './span'
 import Link from 'next/link'
 import styles from './search.module.css'
 
@@ -55,13 +56,21 @@ class Search extends Component {
                             <dl>
                                 <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                     <dt className="text-sm font-medium text-gray-500">
+                                        Context ID
+                                    </dt>
+                                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {this.state.result.event.context_id}
+                                    </dd>
+                                </div>
+                                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                    <dt className="text-sm font-medium text-gray-500">
                                         Trace ID
                                     </dt>
                                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                         {this.state.result.event.trace_id}
                                     </dd>
                                 </div>
-                                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                     <dt className="text-sm font-medium text-gray-500">
                                         Span ID
                                     </dt>
@@ -69,12 +78,20 @@ class Search extends Component {
                                         {this.state.result.event.span_id}
                                     </dd>
                                 </div>
-                                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                     <dt className="text-sm font-medium text-gray-500">
                                         Trace started at
                                     </dt>
                                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                         {this.state.result.event.created_at}
+                                    </dd>
+                                </div>
+                                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                    <dt className="text-sm font-medium text-gray-500">
+                                        Runtime
+                                    </dt>
+                                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {this.state.result.event.elapsed} ms
                                     </dd>
                                 </div>
                             </dl>
@@ -84,9 +101,14 @@ class Search extends Component {
 
                 {this.state.result && this.state.result.children.length > 0 && (
                     <div>
-                        {this.state.result.children.map((child, id) => (
-                            <div key={id}>{child.event.event_id}</div>
-                        ))}
+                        <div 
+                            style={{width: 500}} 
+                            className="bg-blue-200 border-solid border-2 border-gray-600 p-2 m-1"
+                        >
+                            {this.state.result.event.service_name}: {this.state.result.event.name} ({this.state.result.event.elapsed} ms)
+                        </div>
+
+                        <ChildSpans children={this.state.result.children} root_event={this.state.result.event} />
                     </div>
                 )}
             </div>
