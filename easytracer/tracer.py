@@ -51,7 +51,7 @@ class Span:
     def log_kv(self, kv: dict):
         self.context = kv
 
-    def to_event(self, status, error_msg):
+    def to_event(self, elapsed: float, status, error_msg):
         event = {
             "span_id": self.span_id,
             "name": self.name,
@@ -59,6 +59,7 @@ class Span:
             "service_name": self.service_name,
             "trace_id": self.trace_id,
             "status": status,
+            "elapsed": elapsed,
             "error_msg": error_msg
         }
 
@@ -92,7 +93,7 @@ class Tracer:
         if self.logging:
             logger.info(f"[{status}] elapsed {elapsed:.4f}s, reporting span: {span}")
 
-        binary_event = bytes(json.dumps(span.to_event(status, error_msg)), "utf-8")
+        binary_event = bytes(json.dumps(span.to_event(elapsed, status, error_msg)), "utf-8")
         self.udp_socket.send(binary_event)
 
     @contextmanager

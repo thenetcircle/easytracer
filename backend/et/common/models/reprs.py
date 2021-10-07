@@ -10,6 +10,7 @@ class Event(BaseModel):
     trace_id: str
     name: str
     created_at: float
+    elapsed: float
     service_name: str
 
     # 'ok' or 'exception'

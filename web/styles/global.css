@@ -28,11 +28,11 @@ img {
 }
 
 .btn {
-    @apply py-2 px-4 font-semibold rounded-lg shadow-md;
+    @apply m-2 py-2 px-4 font-semibold rounded-lg shadow-md;
 }
 
 .btn-green {
-    @apply text-white bg-green-500 hover:bg-green-700;
+    @apply m-2 text-white bg-green-500 hover:bg-green-700;
 }
 
 .container {
