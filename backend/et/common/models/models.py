@@ -24,6 +24,10 @@ class EventModel(Model):
         required=True,
         primary_key=True
     )
+    span_id = UUID(
+        required=True,
+        primary_key=True
+    )
 
     created_at = DateTime(
         required=True
@@ -38,9 +42,6 @@ class EventModel(Model):
         required=False
     )
 
-    span_id = UUID(
-        required=True
-    )
     name = Text(
         required=True
     )
