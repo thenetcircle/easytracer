@@ -6,7 +6,7 @@ from gnenv import create_env
 from loguru import logger
 
 from et.common.api import TracerApi
-from et.common.models import Event
+from et.common.models.reprs import Event
 from et.utils.config import ConfigKeys
 from et.utils.custom_logging import CustomizeLogger
 from et.utils.decorators import wrap_exception
