@@ -86,10 +86,10 @@ class CassandraHandler:
     @staticmethod
     def event_base_from_entity(event: EventModel):
         return Event(
-            event_id=event.event_id,
+            event_id=str(event.event_id),
             context_id=event.context_id,
-            span_id=event.span_id,
-            trace_id=event.trace_id,
+            span_id=str(event.span_id),
+            trace_id=str(event.trace_id),
             name=event.name,
             created_at=to_ts(event.created_at),
             service_name=event.service_name,
