@@ -12,10 +12,6 @@ class EventModel(Model):
         primary_key=True,
         partition_key=True
     )
-    service_name = Text(
-        required=True,
-        primary_key=True
-    )
     context_id = Text(
         required=True,
         primary_key=True
@@ -29,6 +25,9 @@ class EventModel(Model):
         primary_key=True
     )
 
+    service_name = Text(
+        required=True
+    )
     created_at = DateTime(
         required=True
     )
