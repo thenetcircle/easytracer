@@ -15,7 +15,7 @@ setup(
     author_email='oscar.eriks@gmail.com',
     url='https://github.com/thenetcircle/easytracer',
     license='LICENSE',
-    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+    packages=find_packages(exclude=['ez_setup', 'examples', 'tests', 'backend']),
     include_package_data=True,
     zip_safe=False,
     install_requires=[
