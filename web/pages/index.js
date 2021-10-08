@@ -16,12 +16,11 @@ export default function Home() {
       </section>
       <section className={utilStyles.headingMd}>
         <p>
-          asgfd
+          Find traces for either event ID or context ID
         </p>
       </section>
 
       <Search />
-      
     </Layout>
   )
 }
