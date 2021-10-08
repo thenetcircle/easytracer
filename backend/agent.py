@@ -3,6 +3,7 @@ import os
 import socket
 import sys
 import time
+import json
 
 import requests
 from gnenv import create_env
@@ -43,10 +44,11 @@ def listener(queue):
 def consumer(queue):
     while True:
         try:
-            data = queue.get()
+            data = json.loads(queue.get())
             response = requests.post(
                 collector_endpoint,
-                json=data
+                json=data,
+                headers={"Content-Type": "application/json"}
             )
             if response.status_code != 200:
                 logger.error(f"non-ok response code {response.status_code} for {collector_endpoint}: {response.json()}")
