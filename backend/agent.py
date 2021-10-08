@@ -10,7 +10,7 @@ from loguru import logger
 
 from et.utils.config import ConfigKeys
 
-ENVIRONMENT = os.environ.get("ET_ENVIRONMENT", "local")
+ENVIRONMENT = os.environ.get("ET_ENV", "local")
 SIXTY_FOUR_KB = 2 ** 16
 
 env = create_env(ENVIRONMENT)
