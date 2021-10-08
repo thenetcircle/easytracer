@@ -16,7 +16,9 @@ class ChildSpans extends Component {
                                     }}
                                     className="relative bg-blue-200 border-solid border-2 border-gray-600 p-2 m-1"
                                 >
-                                    {child.event.service_name}: {child.event.name} ({child.event.elapsed} ms)
+                                    <p className="mt-1 text-sm text-gray-900">
+                                        {child.event.service_name}: {child.event.name} ({child.event.elapsed} ms)
+                                    </p>
                                 </div>
 
                                 <ChildSpans children={child.children} root_event={this.props.root_event} />
