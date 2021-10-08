@@ -32,11 +32,14 @@ tracer = config.init_tracer()
 Usage:
 
 ```python
-data = {"some": "event"}
+data = {
+    "some": "event", 
+    "id": "a50d3c0c-280d-11ec-9019-782bcb05db41"  # optional, but is searchable from the UI
+}
 
 # when this context is over (handle_event has finished), this span will "close" and report 
 # the total time spent waiting for processing including any possible remote service 
-with tracer.start_span("handle-event") as span:
+with tracer.start_span("handle-event", event_id=data["id"]) as span:
     span.log_kv(data)  # optionally attach the event data on the root span
     
     # pass the span for any child-tracing of this event

@@ -29,7 +29,9 @@ class Span:
             name: str,
             child_of=None,
             span_id: Optional[str] = None,
-            trace_id: Optional[str] = None
+            trace_id: Optional[str] = None,
+            event_id: Optional[str] = None,
+            context_id: Optional[str] = None
     ):
         self.name: str = name
         self.child_of: Span = child_of
@@ -42,11 +44,23 @@ class Span:
             self.span_id: str = str(uuid())
 
         if child_of is None:
+            self.event_id = event_id
+            self.context_id = context_id
             self.trace_id = trace_id
+
+            if self.event_id is None:
+                self.event_id = str(uuid())
+                logger.warning(f"no event_id specified, generating one: {self.event_id}")
+
+            if self.context_id is None:
+                self.context_id = self.event_id
+
             if self.trace_id is None:
                 self.trace_id = str(uuid())
         else:
             self.trace_id = child_of.trace_id
+            self.event_id = child_of.event_id
+            self.context_id = child_of.context_id
 
     def log_kv(self, kv: dict):
         self.context = kv
@@ -97,9 +111,15 @@ class Tracer:
         self.udp_socket.send(binary_event)
 
     @contextmanager
-    def start_span(self, name: str, child_of: Optional[Span] = None):
+    def start_span(
+            self,
+            name: str,
+            child_of: Optional[Span] = None,
+            event_id: Optional[str] = None,
+            context_id: Optional[str] = None
+    ):
         start = perf_counter()
-        span = Span(self.service_name, name, child_of)
+        span = Span(self.service_name, name, child_of, event_id=event_id, context_id=context_id)
         status = "ok"
         error_msg = ""
 
