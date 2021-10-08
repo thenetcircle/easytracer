@@ -39,4 +39,5 @@ def build_sub_trees(parent_events, candidates):
             else:
                 remaining.append(event)
 
+        parent.children = sorted(parent.children, key=lambda c: c.event.created_at)
         build_sub_trees(parent.children, remaining)

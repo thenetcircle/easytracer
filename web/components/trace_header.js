@@ -24,7 +24,7 @@ class TraceHeader extends Component {
                                     {this.props.result.event.context_id}
                                 </dd>
                             </div>
-                            
+
                             <div className={styles.row_white}>
                                 <dt className={styles.column_key}>
                                     Trace ID
