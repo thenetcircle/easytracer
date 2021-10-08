@@ -72,6 +72,8 @@ class Span:
             "created_at": self.created_at,
             "service_name": self.service_name,
             "trace_id": self.trace_id,
+            "event_id": self.event_id,
+            "context_id": self.context_id,
             "status": status,
             "elapsed": elapsed,
             "error_msg": error_msg
