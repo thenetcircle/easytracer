@@ -16,9 +16,9 @@ api = TracerApi(env)
 app = FastAPI()
 
 # force fastapi/uvicorn to use loguru
-config_path = Path(__file__).with_name("logging_config.json")
-custom_logger = CustomizeLogger.make_logger(config_path)
-app.logger = custom_logger
+#config_path = Path(__file__).with_name("logging_config.json")
+#custom_logger = CustomizeLogger.make_logger(config_path)
+#app.logger = custom_logger
 
 endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, ConfigKeys.DEFAULT_COLLECTOR_ENDPOINT)
 api_path = "/" + endpoint.split("/", 3)[-1]
