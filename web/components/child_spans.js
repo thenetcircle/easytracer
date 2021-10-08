@@ -8,7 +8,10 @@ class ChildSpans extends Component {
                 {this.props.children.length > 0 && (
                     <>
                         {this.props.children.map((child, id) => (
-                            <div className={styles.container} key={id}>
+                            <div className="border p-1" key={id}>
+                                <p className="text-right text-sm text-gray-600">
+                                    {child.event.service_name}: {child.event.name} ({child.event.elapsed} ms)
+                                </p>
                                 <div
                                     style={{
                                         width: 1000 * ((child.event.elapsed / 1000) / (this.props.root_event.elapsed / 1000)),
@@ -16,9 +19,6 @@ class ChildSpans extends Component {
                                     }}
                                     className="relative bg-blue-200 border-solid border-2 border-gray-600 p-2 m-1"
                                 >
-                                    <p className="mt-1 text-sm text-gray-900">
-                                        {child.event.service_name}: {child.event.name} ({child.event.elapsed} ms)
-                                    </p>
                                 </div>
 
                                 <ChildSpans children={child.children} root_event={this.props.root_event} />
