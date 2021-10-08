@@ -22,5 +22,11 @@ app.logger = custom_logger
 
 @app.get("/v1/event/{event_id}/spans", response_model=List[EventWithChildren])
 @wrap_exception()
-async def get_spans(event_id) -> List[EventWithChildren]:
-    return await api.get(event_id)
+async def get_spans_for_event(event_id) -> List[EventWithChildren]:
+    return await api.get(event_id=event_id)
+
+
+@app.get("/v1/context/{context_id}/spans", response_model=List[EventWithChildren])
+@wrap_exception()
+async def get_spans_for_context(context_id) -> List[EventWithChildren]:
+    return await api.get(context_id=context_id)

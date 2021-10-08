@@ -59,11 +59,22 @@ class CassandraHandler:
 
         return value
 
-    def get_events(self, event_id: str):
+    def get_events_by_event_id(self, event_id: str):
         events = (
             EventModel.objects(
                 EventModel.event_id == event_id
             )
+            .all()
+        )
+
+        return [CassandraHandler.event_base_from_entity(event) for event in events]
+
+    def get_events_by_context_id(self, context_id: str):
+        events = (
+            EventModel.objects(
+                EventModel.context_id == context_id
+            )
+            .allow_filtering()
             .all()
         )
 

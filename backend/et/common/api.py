@@ -17,8 +17,15 @@ class TracerApi:
     def __init__(self, env):
         self.storage = CassandraHandler(env)
 
-    async def get(self, event_id: str) -> List[EventWithChildren]:
-        events = self.storage.get_events(event_id)
+    async def get(self, event_id: str = None, context_id: str = None) -> List[EventWithChildren]:
+        if event_id is not None:
+            events = self.storage.get_events_by_event_id(event_id)
+        elif context_id is not None:
+            events = self.storage.get_events_by_context_id(context_id)
+        else:
+            logger.warning("both event_id and context_id was None, returning empty list")
+            return list()
+
         return parse_events(events)
 
     async def post(self, event: Event):
