@@ -1,11 +1,5 @@
 from easytracer.tracer import Tracer
-
-
-class ConfigKeys:
-    AGENT_SOCKET = "agent_socket"
-    LOGGING = "logging"
-    SAMPLER = "sampler"
-    PARAM = "param"
+from easytracer.config_keys import ConfigKeys
 
 
 class Config:

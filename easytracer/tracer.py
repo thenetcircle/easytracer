@@ -1,14 +1,14 @@
 import json
 import logging as logging_system
+import socket
 from contextlib import contextmanager
 from time import perf_counter
 from typing import Optional
 from uuid import uuid4 as uuid
 
-import socket
-
-from easytracer.config import ConfigKeys
 import arrow
+
+from easytracer.config_keys import ConfigKeys
 
 logger = logging_system.getLogger(__name__)
 
