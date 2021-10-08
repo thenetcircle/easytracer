@@ -81,8 +81,11 @@ class Span:
 
         if self.child_of:
             event["child_of"] = self.child_of.span_id
+
         if self.context:
             event["context"] = self.context
+        else:
+            event["context"] = dict()
 
         return event
 
