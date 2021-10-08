@@ -109,8 +109,16 @@ class Tracer:
         if self.logging:
             logger.info(f"[{status}] elapsed {elapsed:.4f}s, reporting span: {span}")
 
-        binary_event = bytes(json.dumps(span.to_event(elapsed, status, error_msg)), "utf-8")
-        self.udp_socket.send(binary_event)
+        try:
+            binary_event = bytes(json.dumps(span.to_event(elapsed, status, error_msg)), "utf-8")
+        except Exception as e:
+            logger.error(f"could not convert span to event: {str(e)}")
+            return
+
+        try:
+            self.udp_socket.send(binary_event)
+        except Exception as e:
+            logger.error(f"could not send event to socket: {str(e)}")
 
     @contextmanager
     def start_span(
