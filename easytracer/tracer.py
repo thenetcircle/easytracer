@@ -34,7 +34,7 @@ class Span:
         self.name: str = name
         self.child_of: Span = child_of
         self.service_name = service_name
-        self.created_at = utcnow_ts
+        self.created_at = utcnow_ts()
         self.context: Optional[dict] = None
 
         self.span_id = span_id
