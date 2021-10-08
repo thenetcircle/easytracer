@@ -14,13 +14,13 @@ class Event(BaseModel):
     service_name: str
 
     # 'ok' or 'exception'
-    status: Optional[str]
+    status: Optional[str] = None
 
-    error_msg: Optional[str]
-    context: Optional[dict]
+    error_msg: Optional[str] = None
+    context: Optional[dict] = None
 
     # root span doesn't have a parent
-    child_of: Optional[str]
+    child_of: Optional[str] = None
 
 
 class EventWithChildren(BaseModel):
