@@ -1,6 +1,6 @@
 {
   "logger": {
-    "path": "/var/log/easytracer.log",
+    "path": "/var/log/easytracer/easytracer.log",
     "filename": "easytracer.log",
     "level": "debug",
     "rotation": "7 days",
