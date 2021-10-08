@@ -108,7 +108,8 @@ class CassandraHandler:
         if context is None:
             context = dict()
         else:
-            context = json.loads(event.context)
+            # TODO: ignore context for now, app server complains about utf-8 surrogates
+            context = dict()  # json.loads(event.context)
 
         return Event(
             event_id=str(event.event_id),
