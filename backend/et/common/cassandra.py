@@ -1,4 +1,5 @@
 import arrow
+import json
 from cassandra.cluster import PlainTextAuthProvider
 from cassandra.cqlengine import connection
 from cassandra.cqlengine.management import sync_table
@@ -85,6 +86,9 @@ class CassandraHandler:
 
         # convert timestamp (float) to datetime object
         event_dict["created_at"] = arrow.get(event_dict["created_at"]).datetime
+
+        if event_dict["context"] is not None:
+            event_dict["context"] = json.dumps(event_dict["context"])
 
         logger.debug(f"saving to cassandra {event_dict}")
 
