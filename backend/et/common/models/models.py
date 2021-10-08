@@ -7,7 +7,7 @@ from cassandra.cqlengine.models import Model
 class EventModel(Model):
     __table_name__ = "events"
 
-    event_id = UUID(
+    event_id = Text(
         required=True,
         primary_key=True,
         partition_key=True
