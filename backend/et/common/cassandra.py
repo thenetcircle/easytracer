@@ -104,6 +104,12 @@ class CassandraHandler:
         if event.child_of is not None:
             child_of = str(event.child_of)
 
+        context = event.context
+        if context is None:
+            context = dict()
+        else:
+            context = json.loads(event.context)
+
         return Event(
             event_id=str(event.event_id),
             context_id=event.context_id,
@@ -115,6 +121,6 @@ class CassandraHandler:
             service_name=event.service_name,
             status=event.status,
             error_msg=event.error_msg,
-            context=event.context,
+            context=context,
             child_of=child_of
         )
