@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = '0.1.4'
+version = '0.1.5'
 
 setup(
     name='easytracer',
@@ -19,6 +19,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
+        "arrow"
     ],
     test_requires=[
     ])

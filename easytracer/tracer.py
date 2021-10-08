@@ -85,8 +85,8 @@ class Tracer:
         self.logging = logging
         self.sampler = sampler
 
-        agent_socket = config.get(ConfigKeys.AGENT_SOCKET, "/var/run/easytracer.sock")
-        self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        agent_socket = config.get(ConfigKeys.AGENT_SOCKET, "/var/run/easytracer/easytracer.sock")
+        self.udp_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
         self.udp_socket.connect(agent_socket)
 
     def report_span(self, span: Span, elapsed: float, status: str, error_msg: str):

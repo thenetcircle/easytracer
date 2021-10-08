@@ -14,14 +14,14 @@ ENVIRONMENT = os.environ.get("ET_ENVIRONMENT", "local")
 SIXTY_FOUR_KB = 2 ** 16
 
 env = create_env(ENVIRONMENT)
-udp_bind_socket = env.config.get(ConfigKeys.BIND_SOCKET, "/var/run/easytracer.sock")
+udp_bind_socket = env.config.get(ConfigKeys.BIND_SOCKET, "/var/run/easytracer/easytracer.sock")
 collector_endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, ConfigKeys.DEFAULT_COLLECTOR_ENDPOINT)
 
 
 # listen on UDP packets from loopback interface, then send them directly to the shared Queue
 # to be able to accept new packets as soon as possible
 def listener(queue):
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+    with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(udp_bind_socket)
 
