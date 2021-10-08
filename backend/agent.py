@@ -13,7 +13,7 @@ from et.utils.config import ConfigKeys
 ENVIRONMENT = os.environ.get("ET_ENV", "local")
 SIXTY_FOUR_KB = 2 ** 16
 
-env = create_env(ENVIRONMENT)
+env = create_env(gn_environment=ENVIRONMENT)
 udp_bind_socket = env.config.get(ConfigKeys.BIND_SOCKET, "/var/run/easytracer/easytracer.sock")
 collector_endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, ConfigKeys.DEFAULT_COLLECTOR_ENDPOINT)
 
