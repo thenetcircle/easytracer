@@ -56,10 +56,12 @@ class Search extends Component {
                         <div className={styles.container}>
                             <div className="m-4 border-solid border-2 border gray-400 p-4">
                                 <div
-                                    style={{ width: 1000 }}
-                                    className="bg-blue-200 border-solid border-2 border-gray-600 p-2 m-1"
+                                    style={{ width: 990, left: 420 }}
+                                    className="relative bg-blue-200 border-solid border-2 border-gray-600 p-1 m-1"
                                 >
-                                    {result.event.service_name}: {result.event.name} ({result.event.elapsed} ms)
+                                    <p className="text-sm text-gray-600">
+                                        {result.event.service_name}: {result.event.name} ({result.event.elapsed} ms)
+                                    </p>
                                 </div>
 
                                 <ChildSpans children={result.children} root_event={result.event} />
