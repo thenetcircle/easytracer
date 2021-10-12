@@ -64,7 +64,7 @@ class Search extends Component {
                                     </p>
                                 </div>
 
-                                <ChildSpans children={result.children} root_event={result.event} />
+                                <ChildSpans children={result.children} root_event={result.event} parent_left={0} />
                             </div>
                         </div>
                     </div>
