@@ -104,11 +104,18 @@ class Tracer:
         self.logging = logging
         self.sampler = sampler
 
-        agent_socket = config.get(ConfigKeys.AGENT_SOCKET, "/var/run/easytracer/easytracer.sock")
-        self.udp_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-        self.udp_socket.connect(agent_socket)
+        if 'mock' in config and config['mock']:
+            self.udp_socket = None
+            logger.warning("mocking tracing as per config")
+        else:
+            agent_socket = config.get(ConfigKeys.AGENT_SOCKET, "/var/run/easytracer/easytracer.sock")
+            self.udp_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+            self.udp_socket.connect(agent_socket)
 
     def report_span(self, span: Span, elapsed: float, status: str, error_msg: str):
+        if self.udp_socket is None:
+            return
+
         if self.logging:
             logger.info(f"[{status}] elapsed {elapsed:.4f}s, reporting span: {span}")
 
