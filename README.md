@@ -20,14 +20,17 @@ config = Config(
         'sampler': {
             'type': 'const',
             'param': 1,
+            'mock': False
         },
         'logging': True,
     },
-    service_name="logistik"
+    service_name="myservice"
 )
 
 tracer = config.init_tracer()
 ```
+
+By setting `mock` to `True`, the tracer will log as usual but won't try to send traces to the agent; useful in testing.
 
 Usage:
 
