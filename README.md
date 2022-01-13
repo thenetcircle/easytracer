@@ -17,12 +17,12 @@ from easytracer import Config
 
 config = Config(
     config={
-        'sampler': {
-            'type': 'const',
-            'param': 1,
-            'mock': False
+        "sampler": {
+            "type": "const",
+            "param": 1,
+            "mock": False
         },
-        'logging': True,
+        "logging": True,
     },
     service_name="myservice"
 )
@@ -30,7 +30,7 @@ config = Config(
 tracer = config.init_tracer()
 ```
 
-By setting `mock` to `True`, the tracer will log as usual but won't try to send traces to the agent; useful in testing.
+By setting `mock` to `True`, the tracer will log as usual but won"t try to send traces to the agent; useful in testing.
 
 Usage:
 
@@ -74,11 +74,11 @@ import easytracer
 
 config = Config(
     config={
-        'sampler': {
-            'type': 'const',
-            'param': 1,
+        "sampler": {
+            "type": "const",
+            "param": 1,
         },
-        'logging': True
+        "logging": True
     },
     service_name="child-service-1"
 )
@@ -98,7 +98,7 @@ def post(request):
 
 ## Running the Agent
 
-The agent should run on the same machine as the service using the easytracer. The agent can either bind to a local 
+The agent should run on the same machine as the service using easytracer. The agent can either bind to a local 
 socket UNIX file, or an INET UDP ip/port. 
 
 The only runtime requirements for the agent is the `requests` library.
