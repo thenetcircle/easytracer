@@ -93,6 +93,38 @@ def post(request):
         process_request(request, span=span)
 ```
 
+## Running the Agent
+
+The agent should run on the same machine as the service using the easytracer. The agent can either bind to a local 
+socket UNIX file, or an INET UDP ip/port. 
+
+The only runtime requirements for the agent is the `requests` library.
+
+Here is an example of listening on _all_ interfaces, port 9999, with debug logging on:
+
+```bash
+python backend/agent.py -v -b :9999 -e http://127.0.0.1:6790/v1/collect
+```
+
+Use `-h` for more information:
+
+```
+usage: agent.py [-h] -b BIND -e ENDPOINT [-v]
+
+easytracer agent
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -b BIND, --bind BIND  Either ip:port or /path/to/easytracer.sock. Example: :9999 or localhost:1234
+  -e ENDPOINT, --endpoint ENDPOINT
+                        Collector endpoint URL. Example: http://127.0.0.1:6790/v1/collect
+  -v, --verbose         Enable debug logging
+```
+
+## Running the Collector
+
+TODO
+
 ## Release a new library version
 
 ```bash
