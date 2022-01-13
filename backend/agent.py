@@ -4,19 +4,22 @@ import socket
 import sys
 import time
 import json
+import logging
 
 import requests
-from gnenv import create_env
-from loguru import logger
 
 from et.utils.config import ConfigKeys
 
-ENVIRONMENT = os.environ.get("ET_ENV", "local")
+logging.basicConfig(
+    format='%(asctime)s : %(levelname)s : %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
 SIXTY_FOUR_KB = 2 ** 16
 
-env = create_env(gn_environment=ENVIRONMENT)
-udp_bind_socket = env.config.get(ConfigKeys.BIND_SOCKET, "/var/run/easytracer/easytracer.sock")
-collector_endpoint = env.config.get(ConfigKeys.COLLECTOR_ENDPOINT, ConfigKeys.DEFAULT_COLLECTOR_ENDPOINT)
+udp_bind_socket = os.environ.get(ConfigKeys.BIND_SOCKET, "/var/run/easytracer/easytracer.sock")
+collector_endpoint = os.environ.get(ConfigKeys.COLLECTOR_ENDPOINT, ConfigKeys.DEFAULT_COLLECTOR_ENDPOINT)
 
 
 # listen on UDP packets from loopback interface, then send them directly to the shared Queue
