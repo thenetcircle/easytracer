@@ -16,15 +16,16 @@ Initialize the tracer:
 from easytracer import Config
 
 config = Config(
+    service_name="myservice",
     config={
         "sampler": {
             "type": "const",
             "param": 1,
-            "mock": False
         },
+        "mock": False,
         "logging": True,
+        "agent_socket": "127.0.0.1:9999"
     },
-    service_name="myservice"
 )
 
 tracer = config.init_tracer()
